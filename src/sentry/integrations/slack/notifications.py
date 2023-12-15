@@ -6,9 +6,10 @@ from typing import Any, Iterable, List, Mapping
 
 import sentry_sdk
 
+from sentry import features
 from sentry.integrations.mixins import NotifyBasicMixin
 from sentry.integrations.notifications import get_context, get_integrations_by_channel_by_recipient
-from sentry.integrations.slack.message_builder import SlackAttachment
+from sentry.integrations.slack.message_builder import SlackAttachment, SlackBlock
 from sentry.integrations.slack.message_builder.notifications import get_message_builder
 from sentry.models.integrations.integration import Integration
 from sentry.notifications.additional_attachment_manager import get_additional_attachment
@@ -43,7 +44,7 @@ def _get_attachments(
     recipient: RpcActor,
     shared_context: Mapping[str, Any],
     extra_context_by_actor: Mapping[RpcActor, Mapping[str, Any]] | None,
-) -> List[SlackAttachment]:
+) -> List[SlackAttachment] | SlackBlock:
     extra_context = (
         extra_context_by_actor[recipient] if extra_context_by_actor and recipient else {}
     )
@@ -52,13 +53,17 @@ def _get_attachments(
     attachments = cls(notification, context, recipient).build()
     if isinstance(attachments, List):
         return attachments
+    elif isinstance(attachments, dict) and features.has(
+        "organizations:slack-block-kit", notification.organization
+    ):
+        return attachments
     return [attachments]
 
 
 def _notify_recipient(
     notification: BaseNotification,
     recipient: RpcActor,
-    attachments: List[SlackAttachment],
+    attachments: List[SlackAttachment] | SlackBlock,
     channel: str,
     integration: Integration,
     shared_context: Mapping[str, Any],
@@ -67,26 +72,51 @@ def _notify_recipient(
         # Make a local copy to which we can append.
         local_attachments = copy(attachments)
 
-        # Add optional billing related attachment.
-        additional_attachment = get_additional_attachment(integration, notification.organization)
-        if additional_attachment:
-            local_attachments.append(additional_attachment)
+        # TODO: handle additional_attachments for block kit
+        if features.has("organizations:slack-block-kit", notification.organization):
+            # if local_attachments.get("blocks"):
+            #     payload = {
+            #         "text": local_attachments.get("text"),
+            #         "blocks": json.dumps(local_attachments.get("blocks")),
+            #         "channel": channel
+            #     }
+            text = notification.get_notification_title(ExternalProviders.SLACK, shared_context)
+            blocks = [{"type": "section", "text": {"type": "plain_text", "text": text}}]
+            if local_attachments.get("blocks"):
+                attachment_blocks = local_attachments.get("blocks")
+                for block in attachment_blocks:
+                    blocks.append(block)
+            payload = {
+                "text": text,
+                "blocks": json.dumps(blocks),
+                "channel": channel,
+            }
+        else:
+            # Add optional billing related attachment.
+            additional_attachment = get_additional_attachment(
+                integration, notification.organization
+            )
+            if additional_attachment:
+                local_attachments.append(additional_attachment)
 
-        # unfurl_links and unfurl_media are needed to preserve the intended message format
-        # and prevent the app from replying with help text to the unfurl
-        payload = {
-            "channel": channel,
-            "link_names": 1,
-            "unfurl_links": False,
-            "unfurl_media": False,
-            "text": notification.get_notification_title(ExternalProviders.SLACK, shared_context),
-            "attachments": json.dumps(local_attachments),
-        }
+            # unfurl_links and unfurl_media are needed to preserve the intended message format
+            # and prevent the app from replying with help text to the unfurl
+            payload = {
+                "channel": channel,
+                "link_names": 1,
+                "unfurl_links": False,
+                "unfurl_media": False,
+                "text": notification.get_notification_title(
+                    ExternalProviders.SLACK, shared_context
+                ),
+                "attachments": json.dumps(local_attachments),
+            }
 
         log_params = {
             "notification": notification,
             "recipient": recipient.id,
             "channel_id": channel,
+            "payload": payload,
         }
         post_message.apply_async(
             kwargs={
