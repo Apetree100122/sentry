@@ -10,6 +10,7 @@ from sentry import features
 from sentry.integrations.mixins import NotifyBasicMixin
 from sentry.integrations.notifications import get_context, get_integrations_by_channel_by_recipient
 from sentry.integrations.slack.message_builder import SlackAttachment, SlackBlock
+from sentry.integrations.slack.message_builder.base.block import BlockSlackMessageBuilder
 from sentry.integrations.slack.message_builder.notifications import get_message_builder
 from sentry.models.integrations.integration import Integration
 from sentry.notifications.additional_attachment_manager import get_additional_attachment
@@ -51,9 +52,7 @@ def _get_attachments(
     context = get_context(notification, recipient, shared_context, extra_context)
     cls = get_message_builder(notification.message_builder)
     attachments = cls(notification, context, recipient).build()
-    if isinstance(attachments, List):
-        return attachments
-    elif isinstance(attachments, dict) and features.has(
+    if isinstance(attachments, List) or features.has(
         "organizations:slack-block-kit", notification.organization
     ):
         return attachments
@@ -71,17 +70,11 @@ def _notify_recipient(
     with sentry_sdk.start_span(op="notification.send_slack", description="notify_recipient"):
         # Make a local copy to which we can append.
         local_attachments = copy(attachments)
+        text = notification.get_notification_title(ExternalProviders.SLACK, shared_context)
 
         # TODO: handle additional_attachments for block kit
         if features.has("organizations:slack-block-kit", notification.organization):
-            # if local_attachments.get("blocks"):
-            #     payload = {
-            #         "text": local_attachments.get("text"),
-            #         "blocks": json.dumps(local_attachments.get("blocks")),
-            #         "channel": channel
-            #     }
-            text = notification.get_notification_title(ExternalProviders.SLACK, shared_context)
-            blocks = [{"type": "section", "text": {"type": "plain_text", "text": text}}]
+            blocks = [BlockSlackMessageBuilder.get_markdown_block(text)]
             if local_attachments.get("blocks"):
                 attachment_blocks = local_attachments.get("blocks")
                 for block in attachment_blocks:
@@ -90,6 +83,8 @@ def _notify_recipient(
                 "text": text,
                 "blocks": json.dumps(blocks),
                 "channel": channel,
+                "unfurl_links": False,
+                "unfurl_media": False,
             }
         else:
             # Add optional billing related attachment.
@@ -106,9 +101,7 @@ def _notify_recipient(
                 "link_names": 1,
                 "unfurl_links": False,
                 "unfurl_media": False,
-                "text": notification.get_notification_title(
-                    ExternalProviders.SLACK, shared_context
-                ),
+                "text": text,
                 "attachments": json.dumps(local_attachments),
             }
 
@@ -116,7 +109,6 @@ def _notify_recipient(
             "notification": notification,
             "recipient": recipient.id,
             "channel_id": channel,
-            "payload": payload,
         }
         post_message.apply_async(
             kwargs={
