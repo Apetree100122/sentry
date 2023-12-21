@@ -364,6 +364,16 @@ class EventManagerGroupingTest(TestCase):
 
         assert event.group
 
+    def test_handles_bogus_config(self):
+        project = self.project
+        project.update_option("sentry:grouping_config", "not-a-real-config")
+
+        manager = EventManager(make_event(message="dogs are great!"))
+        manager.normalize()
+        event = manager.save(project.id)
+
+        assert event.group
+
 
 @region_silo_test
 class EventManagerGroupingMetricsTest(TestCase):
