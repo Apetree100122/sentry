@@ -212,8 +212,8 @@ class Organization(
         # Enable codecov integration.
         codecov_access: bool
 
-        # Disable org-members from creating new projects
-        disable_member_project_creation: bool
+        # Allow org-members to create new projects
+        allow_member_project_creation: bool
 
         bitfield_default = 1
 

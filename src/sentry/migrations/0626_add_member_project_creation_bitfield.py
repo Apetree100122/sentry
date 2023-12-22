@@ -37,7 +37,7 @@ class Migration(CheckedMigration):
                     "disable_new_visibility_features",
                     "require_email_verification",
                     "codecov_access",
-                    "disable_member_project_creation",
+                    "allow_member_project_creation",
                 ],
                 default=1,
             ),
