@@ -43,6 +43,7 @@ export interface Organization extends OrganizationSummary {
   access: Scope[];
   alertsMemberWrite: boolean;
   allowJoinRequests: boolean;
+  allowMemberProjectCreation: boolean;
   allowSharedIssues: boolean;
   attachmentsRole: string;
   availableRoles: {id: string; name: string}[]; // Deprecated, use orgRoleList

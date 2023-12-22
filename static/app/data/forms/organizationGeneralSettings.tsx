@@ -77,7 +77,14 @@ const formGroups: JsonFormObject[] = [
         type: 'boolean',
         required: true,
         label: t('Open Membership'),
-        help: t('Allow organization members to freely join any team'),
+        help: t('Allow members to freely join any team'),
+      },
+      {
+        name: 'allowMemberProjectCreation',
+        type: 'boolean',
+        required: true,
+        label: t('Let Members Create Projects'),
+        help: t('Allow members to create and set up new projects'),
       },
       {
         name: 'eventsMemberAdmin',

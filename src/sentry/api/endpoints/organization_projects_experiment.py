@@ -87,7 +87,9 @@ class OrganizationProjectsExperimentEndpoint(OrganizationEndpoint):
 
         result = serializer.validated_data
 
-        if not features.has("organizations:team-roles", organization):
+        if not organization.flags.allow_member_project_creation or not features.has(
+            "organizations:team-roles", organization
+        ):
             raise ResourceDoesNotExist(detail=MISSING_PERMISSION_ERROR_STRING)
 
         # parse the email to retrieve the username before the "@"

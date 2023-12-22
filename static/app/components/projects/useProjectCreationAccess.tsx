@@ -6,6 +6,7 @@ import {Organization} from 'sentry/types';
 export function useProjectCreationAccess({organization}: {organization: Organization}) {
   const canCreateProject =
     organization.access.includes('project:admin') ||
-    organization.features.includes('team-roles');
+    (organization.features.includes('team-roles') &&
+      organization.allowMemberProjectCreation);
   return {canCreateProject};
 }

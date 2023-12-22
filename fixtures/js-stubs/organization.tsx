@@ -41,6 +41,7 @@ export function Organization(
     alertsMemberWrite: false,
     allowJoinRequests: false,
     allowSharedIssues: false,
+    allowMemberProjectCreation: false,
     attachmentsRole: '',
     availableRoles: [],
     avatar: {

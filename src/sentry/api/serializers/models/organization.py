@@ -343,6 +343,7 @@ class OrganizationSerializer(Serializer):
                 features.has("organizations:required-email-verification", obj)
                 and obj.flags.require_email_verification
             ),
+            "allowMemberProjectCreation": bool(obj.flags.allow_member_project_creation),
             "avatar": avatar,
             "features": feature_list,
             "links": {
