@@ -110,16 +110,16 @@ class EventAttachment(Model):
         return rv
 
     def getfile(self) -> IO:
-        if self.file_id:
-            from sentry.models.files.file import File
+        if self.blob_path:
+            if self.blob_path.startswith("eventattachments/v1/"):
+                storage = get_storage()
 
-            file = File.objects.get(id=self.file_id)
-            return file.getfile()
+            return storage.open(self.blob_path)
 
-        if self.blob_path.startswith("eventattachments/v1/"):
-            storage = get_storage()
+        from sentry.models.files.file import File
 
-        return storage.open(self.blob_path)
+        file = File.objects.get(id=self.file_id)
+        return file.getfile()
 
     @classmethod
     def putfile(cls, project_id: int, attachment: CachedAttachment) -> PutfileResult:
