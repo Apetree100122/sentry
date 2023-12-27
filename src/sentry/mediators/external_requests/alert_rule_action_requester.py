@@ -70,6 +70,7 @@ class AlertRuleActionRequester(Mediator):
                 data=self.body,
             )
         except RequestException as e:
+            assert e.response is not None
             logger.info(
                 "alert_rule_action.error",
                 extra={

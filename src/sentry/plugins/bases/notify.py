@@ -192,7 +192,7 @@ class NotificationPlugin(Plugin):
         try:
             test_results = self.test_configuration(project)
         except Exception as exc:
-            if isinstance(exc, HTTPError) and hasattr(exc.response, "text"):
+            if isinstance(exc, HTTPError) and exc.response and hasattr(exc.response, "text"):
                 test_results = f"{exc}\n{exc.response.text[:256]}"
             elif hasattr(exc, "read") and callable(exc.read):
                 test_results = f"{exc}\n{exc.read()[:256]}"

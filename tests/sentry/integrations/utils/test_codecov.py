@@ -106,4 +106,5 @@ class TestCodecovIntegration(APITestCase):
                 path="path/to/file.py",
             )
 
+        assert e.value.response is not None
         assert e.value.response.status_code == 404

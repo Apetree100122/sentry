@@ -150,6 +150,7 @@ def fetch_codecov_data(config: Dict[str, Any]) -> Dict[str, Any]:
                 "status": status.HTTP_200_OK,
             }
     except requests.exceptions.HTTPError as error:
+        assert error.response is not None  # all HTTPErrors thrown from requests have a response
         data = {
             "attemptedUrl": error.response.url,
             "status": error.response.status_code,

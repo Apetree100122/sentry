@@ -201,6 +201,7 @@ class AsanaPlugin(CorePluginMixin, IssuePlugin2):
         try:
             workspaces = client.get_workspaces()
         except HTTPError as e:
+            assert e.response is not None
             if (
                 e.response.status_code == 400
                 and e.response.url == "https://app.asana.com/-/oauth_token"
