@@ -1,0 +1,1 @@
+[![meta(deploy)](https://github.com/Apetree100122/sentry/actions/workflows/meta-deploys-detect-change-type.yml/badge.svg)](https://github.com/Apetree100122/sentry/actions/workflows/meta-deploys-detect-change-type.yml)
