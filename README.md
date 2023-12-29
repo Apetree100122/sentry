@@ -53,3 +53,7 @@ Sentry is a developer-first error tracking and performance monitoring platform t
 - [Code](https://github.com/getsentry/sentry)
 - [Transifex](https://www.transifex.com/getsentry/sentry/) (Translate
   Sentry\!)
+
+
+
+[![meta(deploy)](https://github.com/Apetree100122/sentry/actions/workflows/meta-deploys-detect-change-type.yml/badge.svg)](https://github.com/Apetree100122/sentry/actions/workflows/meta-deploys-detect-change-type.yml)
