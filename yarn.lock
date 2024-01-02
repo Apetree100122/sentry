@@ -2284,6 +2284,16 @@
     "@react-types/slider" "^3.5.1"
     "@swc/helpers" "^0.4.14"
 
+"@react-stately/slider@^3.4.5":
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/@react-stately/slider/-/slider-3.5.0.tgz#d59bcd6fe58c238772b771ffb1a5640fb22d839c"
+  integrity sha512-dOVpIxb7XKuiRxgpHt1bUSlsklciFki100tKIyBPR+Okar9iC/CwLYROYgVfLkGe77jEBNkor9tDLjDGEWcc1w==
+  dependencies:
+    "@react-stately/utils" "^3.9.0"
+    "@react-types/shared" "^3.22.0"
+    "@react-types/slider" "^3.7.0"
+    "@swc/helpers" "^0.5.0"
+
 "@react-stately/tabs@^3.4.1":
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/@react-stately/tabs/-/tabs-3.4.1.tgz#f1d74551808f4d0a33f1c8d0e918bfbb5feeea03"
@@ -2322,6 +2332,13 @@
   integrity sha512-rptF7iUWDrquaYvBAS4QQhOBQyLBncDeHF03WnHXAxnuPJXNcr9cXJtjJPGCs036ZB8Q2hc9BGG5wNyMkF5v+Q==
   dependencies:
     "@swc/helpers" "^0.4.14"
+
+"@react-stately/utils@^3.9.0":
+  version "3.9.0"
+  resolved "https://registry.yarnpkg.com/@react-stately/utils/-/utils-3.9.0.tgz#9cb2c8eea5dd1b58256ecb436b963c01526bae37"
+  integrity sha512-yPKFY1F88HxuZ15BG2qwAYxtpE4HnIU0Ofi4CuBE0xC6I8mwo4OQjDzi+DZjxQngM9D6AeTTD6F1V8gkozA0Gw==
+  dependencies:
+    "@swc/helpers" "^0.5.0"
 
 "@react-stately/virtualizer@^3.5.2":
   version "3.5.2"
@@ -2401,12 +2418,24 @@
   resolved "https://registry.yarnpkg.com/@react-types/shared/-/shared-3.18.1.tgz#45bac7a1a433916d16535ea583d86a2b4c72ff8c"
   integrity sha512-OpTYRFS607Ctfd6Tmhyk6t6cbFyDhO5K+etU35X50pMzpypo1b7vF0mkngEeTc0Xwl0e749ONZNPZskMyu5k8w==
 
+"@react-types/shared@^3.22.0":
+  version "3.22.0"
+  resolved "https://registry.yarnpkg.com/@react-types/shared/-/shared-3.22.0.tgz#70f85aad46cd225f7fcb29f1c2b5213163605074"
+  integrity sha512-yVOekZWbtSmmiThGEIARbBpnmUIuePFlLyctjvCbgJgGhz8JnEJOipLQ/a4anaWfzAgzSceQP8j/K+VOOePleA==
+
 "@react-types/slider@^3.5.1":
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/@react-types/slider/-/slider-3.5.1.tgz#bae46025de7d02a84918b3aca0e3ffd647e4fdf2"
   integrity sha512-8+AMNexx7q7DqfAtQKC5tgnZdG/tIwG2tcEbFCfAQA09Djrt/xiMNz+mc7SsV1PWoWwVuSDFH9QqKPodOrJHDg==
   dependencies:
     "@react-types/shared" "^3.18.1"
+
+"@react-types/slider@^3.7.0":
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/@react-types/slider/-/slider-3.7.0.tgz#d9e4dbe1b2109c7accfcc0e2e330ff10cd3a837c"
+  integrity sha512-uyQXUVFfqc9SPUW0LZLMan2n232F/OflRafiHXz9viLFa9tVOupVa7GhASRAoHojwkjoJ1LjFlPih7g5dOZ0/Q==
+  dependencies:
+    "@react-types/shared" "^3.22.0"
 
 "@react-types/tabs@^3.3.0":
   version "3.3.0"
@@ -2688,6 +2717,13 @@
   version "0.4.14"
   resolved "https://registry.yarnpkg.com/@swc/helpers/-/helpers-0.4.14.tgz#1352ac6d95e3617ccb7c1498ff019654f1e12a74"
   integrity sha512-4C7nX/dvpzB7za4Ql9K81xK3HPxCpHMgwTZVyf+9JQ6VUbn9jjZVN7/Nkdz/Ugzs2CSjqnL/UPXroiVBVHUWUw==
+  dependencies:
+    tslib "^2.4.0"
+
+"@swc/helpers@^0.5.0":
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/@swc/helpers/-/helpers-0.5.3.tgz#98c6da1e196f5f08f977658b80d6bd941b5f294f"
+  integrity sha512-FaruWX6KdudYloq1AHD/4nU+UsMTdNE8CKyrseXWEcgjDAbvkwJg2QGPAnfIJLIWsjZOSPLOAykK6fuYp4vp4A==
   dependencies:
     tslib "^2.4.0"
 
